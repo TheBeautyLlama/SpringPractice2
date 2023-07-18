@@ -78,14 +78,14 @@ def load_to_objects_rows():
                 f.write(f"{section}: {commands} \n")
             print(f"{section}: {commands}")
 
-#def create_csv_from_rows():
-#    templates = json.loads(resp.text)
-#    headers = templates[0].keys()
-#
-#    with open('file.csv', 'w') as f:
-#        writer = csv.DictWriter(f, fieldnames=headers)
-#        writer.writeheader()
-#        writer.writerows(templates)
+def create_csv_from_rows():
+    templates = json.loads(resp.text)
+    headers = templates[0].keys()
+
+    with open('file.csv', 'w') as f:
+        writer = csv.DictWriter(f, fieldnames=headers)
+        writer.writeheader()
+        writer.writerows(templates)
 
 #
 global dataset_id
@@ -123,8 +123,8 @@ load_button.pack(anchor=N)
 load_rows_button = ttk.Button(text="Load rows", command = load_to_objects_rows)
 load_rows_button.pack(anchor=N)
 
-#create_csv_button = ttk.Button(text="Create CSV from rows", command = create_csv_from_rows)
-#create_csv_button.pack(anchor=N)
+create_csv_button = ttk.Button(text="Create CSV from rows", command = create_csv_from_rows)
+create_csv_button.pack(anchor=N)
 
 load_key_button = ttk.Button(text="Load API Key", command = api_key_check)
 load_key_button.pack(anchor=N)
