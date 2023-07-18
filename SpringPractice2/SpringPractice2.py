@@ -1,5 +1,3 @@
-#key d6b483fbdf547be34855aefc9f404b9e
-#f"Clicks {clicks}"
 import os
 from urllib import response
 import requests
