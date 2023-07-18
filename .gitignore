@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/SpringPractice2/api_key.txt
+/SpringPractice2/file.csv
+/SpringPractice2/result.json
+/SpringPractice2/FullDescritpion.html
+/SpringPractice2/sw_templates.json
