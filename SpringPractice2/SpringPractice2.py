@@ -19,12 +19,13 @@ def api_key_check():
             api_key_entry.insert(0, api_key)
     with open('api_key.txt', 'r') as f:
         api_key = f.read()
+    print('\nSaved API key!')
 
 def load_to_objects():
     global resp
-    dataset_id = dataset_id_entry.get()
     global api_key
-    print (f"https://apidata.mos.ru/v1/datasets/{dataset_id}")
+    dataset_id = dataset_id_entry.get()
+    print (f"https://apidata.mos.ru/v1/datasets/{dataset_id}?api_key={api_key}")
     resp = requests.get(f"https://apidata.mos.ru/v1/datasets/{dataset_id}?api_key={api_key}")
 
     filename = "result.json"
@@ -33,10 +34,10 @@ def load_to_objects():
     print(resp.text)
 
     templates = json.loads(resp.text)
-    with open('sw_templates.json', 'w') as f:
-                f.write("")
+    with open('readable_result.txt', 'w') as f:
+        f.write("")
     for section, commands in templates.items():
-        with open('sw_templates.json', 'a') as f:
+        with open('readable_result.txt', 'a') as f:
             if section == "FullDescription":
                     try:
                         with open("FullDescritpion.html","w") as i:
@@ -46,44 +47,48 @@ def load_to_objects():
             f.write(f"\n")
             f.write(f"{section}: {commands} \n")
         print(f"{section}: {commands}")
+    print("\nLoaded description!")
 
 def load_to_objects_rows():
     global resp
     global api_key
     global templates
     dataset_id = dataset_id_entry.get()
-    print (f"https://apidata.mos.ru/v1/datasets/{dataset_id}/rows")
+    print (f"https://apidata.mos.ru/v1/datasets/{dataset_id}/rows?api_key={api_key}")
     resp = requests.get(f"https://apidata.mos.ru/v1/datasets/{dataset_id}/rows?api_key={api_key}")
 
-    filename = "result.json"
+    filename = "rows.json"
     with open(filename, 'w') as f:
         json.dump(resp.text, f)
     print(resp.text)
 
     templates = json.loads(resp.text)
-    with open('sw_templates.json', 'w') as f:
+    with open('readable_rows.txt', 'w') as f:
                 f.write("")
     for tuple in templates:
         for section, commands in tuple.items():
-            with open('sw_templates.json', 'a') as f:
-                if section == "FullDescription":
-                    with open("FullDescritpion.html","w") as i:
-                        try:
-                            i.write(commands)
-                        except TypeError:
-                            print("FullDiscription is Null")
+            with open('readable_rows.txt', 'a') as f:
                 f.write(f"\n")
                 f.write(f"{section}: {commands} \n")
             print(f"{section}: {commands}")
+    print("\nLoaded rows!")
 
 def create_csv_from_rows():
-    templates = json.loads(resp.text)
+    global templates
     headers = templates[0].keys()
 
     with open('file.csv', 'w') as f:
         writer = csv.DictWriter(f, fieldnames=headers)
         writer.writeheader()
         writer.writerows(templates)
+    print("\nCreated CSV!")
+
+def everything_at_once():
+    api_key_check()
+    load_to_objects()
+    load_to_objects_rows()
+    create_csv_from_rows()
+    print("\nDone!")
 
 #
 global dataset_id
@@ -92,7 +97,7 @@ global resp
 
 root = Tk()
 root.title("Some Programm :D")
-root.geometry("300x200")
+root.geometry("300x250")
 
 greeting = ttk.Label(text="Enter article ID")
 greeting.pack(anchor=N)
@@ -124,6 +129,9 @@ load_rows_button.pack(anchor=N)
 create_csv_button = ttk.Button(text="Create CSV from rows", command = create_csv_from_rows)
 create_csv_button.pack(anchor=N)
 
-load_key_button = ttk.Button(text="Load API Key", command = api_key_check)
-load_key_button.pack(anchor=N)
+save_key_button = ttk.Button(text="Save API Key", command = api_key_check)
+save_key_button.pack(anchor=N)
+
+everything_at_once_button = ttk.Button(text="Everything at once", command = everything_at_once)
+everything_at_once_button.pack(anchor=N)
 root.mainloop()
