@@ -134,4 +134,5 @@ save_key_button.pack(anchor=N)
 
 everything_at_once_button = ttk.Button(text="Everything at once", command = everything_at_once)
 everything_at_once_button.pack(anchor=N)
+
 root.mainloop()
